@@ -1,0 +1,302 @@
+[
+  {
+    "id": "EXT-01",
+    "query": "I run a small factory making 53 grade cement for high strength concrete applications.",
+    "retrieved_standards": [
+      "IS 12269: 1987",
+      "IS 6452: 1989",
+      "IS 8112: 1989",
+      "IS 269: 1989",
+      "IS 3466: 1988"
+    ],
+    "latency_seconds": 0.0772,
+    "expected_standards": [
+      "IS 12269: 1987"
+    ]
+  },
+  {
+    "id": "EXT-02",
+    "query": "We produce fine aggregate from crushed stone for use in concrete and mortar.",
+    "retrieved_standards": [
+      "IS 383: 1970",
+      "IS 3068: 1986",
+      "IS 9142: 1979",
+      "IS 6579: 1981",
+      "IS 3182: 1986"
+    ],
+    "latency_seconds": 0.0141,
+    "expected_standards": [
+      "IS 383: 1970"
+    ]
+  },
+  {
+    "id": "EXT-03",
+    "query": "Our unit manufactures solid concrete blocks for load bearing walls.",
+    "retrieved_standards": [
+      "IS 2185 (Part 1): 1979",
+      "IS 2185 (PART 1): 1979",
+      "IS 2185 (PART 2): 1983",
+      "IS 12440: 1988",
+      "IS 2849: 1983"
+    ],
+    "latency_seconds": 0.0163,
+    "expected_standards": [
+      "IS 2185 (Part 1): 1979"
+    ]
+  },
+  {
+    "id": "EXT-04",
+    "query": "We make aerated autoclaved lightweight blocks for thermal insulation in buildings.",
+    "retrieved_standards": [
+      "IS 2185 (Part 3): 1984",
+      "IS 2185 (Part 3): 1984",
+      "IS 2185 (Part 2): 1983",
+      "IS 2185 (PART 3): 1984",
+      "IS 11307: 1985"
+    ],
+    "latency_seconds": 0.0118,
+    "expected_standards": [
+      "IS 2185 (Part 3): 1984"
+    ]
+  },
+  {
+    "id": "EXT-05",
+    "query": "I need the standard for burnt clay perforated building bricks.",
+    "retrieved_standards": [
+      "IS 2222: 1979",
+      "IS 2222: 1979",
+      "IS 2691: 1988",
+      "IS 2180: 1988",
+      "IS 3583: 1988"
+    ],
+    "latency_seconds": 0.0161,
+    "expected_standards": [
+      "IS 2222: 1979"
+    ]
+  },
+  {
+    "id": "EXT-06",
+    "query": "Our factory produces rapid hardening Portland cement for cold weather construction.",
+    "retrieved_standards": [
+      "IS 8041: 1990",
+      "IS 12269: 1987",
+      "IS 8112: 1989",
+      "IS 6452: 1989",
+      "IS 12330: 1988"
+    ],
+    "latency_seconds": 0.0093,
+    "expected_standards": [
+      "IS 8041: 1990"
+    ]
+  },
+  {
+    "id": "EXT-07",
+    "query": "We manufacture low heat Portland cement for mass concrete in dams.",
+    "retrieved_standards": [
+      "IS 12600: 1989",
+      "IS 12600: 1989",
+      "IS 12600: 1989",
+      "IS 8112: 1989",
+      "IS 12269: 1987"
+    ],
+    "latency_seconds": 0.0105,
+    "expected_standards": [
+      "IS 12600: 1989"
+    ]
+  },
+  {
+    "id": "EXT-08",
+    "query": "I make high alumina cement refractory castables for furnace linings.",
+    "retrieved_standards": [
+      "IS 6452: 1989",
+      "IS 11308: 1985",
+      "IS 9912: 1981",
+      "IS 3709: 1966",
+      "IS 2690 (PART 1): 1993"
+    ],
+    "latency_seconds": 0.0377,
+    "expected_standards": [
+      "IS 6452: 1989"
+    ]
+  },
+  {
+    "id": "EXT-09",
+    "query": "Our plant produces sulphate resisting Portland cement for foundations in aggressive soil.",
+    "retrieved_standards": [
+      "IS 12330: 1988",
+      "IS 6909: 1990",
+      "IS 4832 (PART 3): 1968",
+      "IS 1489 (PART1): 1991",
+      "IS 455: 1989"
+    ],
+    "latency_seconds": 0.0113,
+    "expected_standards": [
+      "IS 12330: 1988"
+    ]
+  },
+  {
+    "id": "EXT-10",
+    "query": "We manufacture sand for masonry mortar used in brick and block construction.",
+    "retrieved_standards": [
+      "IS 2116: 1980",
+      "IS 2116: 1980",
+      "IS 1542: 1992",
+      "IS 3182: 1986",
+      "IS 3466: 1988"
+    ],
+    "latency_seconds": 0.0114,
+    "expected_standards": [
+      "IS 2116: 1980"
+    ]
+  },
+  {
+    "id": "EXT-11",
+    "query": "I produce unreinforced concrete pipes for underground drainage and sewerage.",
+    "retrieved_standards": [
+      "IS 7319: 1974",
+      "IS 13592: 1992",
+      "IS 4350: 1967",
+      "IS 458: 2003",
+      "IS 7322: 1985"
+    ],
+    "latency_seconds": 0.0129,
+    "expected_standards": [
+      "IS 458: 2003"
+    ]
+  },
+  {
+    "id": "EXT-12",
+    "query": "Our company makes clay roofing tiles \u2014 mangalore pattern \u2014 for sloped roofs.",
+    "retrieved_standards": [
+      "IS 654: 1992",
+      "IS 654: 1992",
+      "IS 1464: 1992",
+      "IS 3951 (PART 2): 1975",
+      "IS 1478: 1992"
+    ],
+    "latency_seconds": 0.0111,
+    "expected_standards": [
+      "IS 654: 1992"
+    ]
+  },
+  {
+    "id": "EXT-13",
+    "query": "We manufacture asbestos cement pressure pipes for water mains.",
+    "retrieved_standards": [
+      "IS 1592: 2003",
+      "IS 9627: 1980",
+      "IS 1626 (PART 1): 1994",
+      "IS 12987: 1991",
+      "IS 6908: 1991"
+    ],
+    "latency_seconds": 0.0109,
+    "expected_standards": [
+      "IS 1592: 2003"
+    ]
+  },
+  {
+    "id": "EXT-14",
+    "query": "I make lime for use in construction mortars and plaster.",
+    "retrieved_standards": [
+      "IS 712: 1984",
+      "IS 3182: 1986",
+      "IS 3068: 1986",
+      "IS 4098: 1983",
+      "IS 2686: 1977"
+    ],
+    "latency_seconds": 0.0098,
+    "expected_standards": [
+      "IS 712: 1984"
+    ]
+  },
+  {
+    "id": "EXT-15",
+    "query": "Our factory produces calcium silicate bricks for high temperature industrial use.",
+    "retrieved_standards": [
+      "IS 4139: 1989",
+      "IS 11128: 1984",
+      "IS 8154: 1993",
+      "IS 3182: 1986",
+      "IS 9428: 1993"
+    ],
+    "latency_seconds": 0.0112,
+    "expected_standards": [
+      "IS 4139: 1989"
+    ]
+  },
+  {
+    "id": "EXT-16",
+    "query": "We make fly ash for use as a pozzolanic material in cement and concrete.",
+    "retrieved_standards": [
+      "IS 1489 (Part 1): 1991",
+      "IS 1489 (PART1): 1991",
+      "IS 1489 (PART 2): 1991",
+      "IS 9142: 1979",
+      "IS 10772: 1983"
+    ],
+    "latency_seconds": 0.0081,
+    "expected_standards": [
+      "IS 3812: 1981"
+    ]
+  },
+  {
+    "id": "EXT-17",
+    "query": "I manufacture concrete kerb stones and edging for road construction.",
+    "retrieved_standards": [
+      "IS 5758: 1984",
+      "IS 1127: 1970",
+      "IS 3620: 1979",
+      "IS 383: 1970",
+      "IS 9394: 1979"
+    ],
+    "latency_seconds": 0.0132,
+    "expected_standards": [
+      "IS 5758: 1984"
+    ]
+  },
+  {
+    "id": "EXT-18",
+    "query": "Our unit produces white topping concrete and white cement tiles for flooring.",
+    "retrieved_standards": [
+      "IS 8042: 1989",
+      "IS 1237: 1980",
+      "IS 2690 (PART 1): 1993",
+      "IS 1478: 1992",
+      "IS 1464: 1992"
+    ],
+    "latency_seconds": 0.0124,
+    "expected_standards": [
+      "IS 8042: 1989"
+    ]
+  },
+  {
+    "id": "EXT-19",
+    "query": "We manufacture lightweight aggregate from sintered fly ash for concrete.",
+    "retrieved_standards": [
+      "IS 9142: 1979",
+      "IS 9142: 1979",
+      "IS 1489 (PART1): 1991",
+      "IS 383: 1970",
+      "IS 6579: 1981"
+    ],
+    "latency_seconds": 0.009,
+    "expected_standards": [
+      "IS 9142: 1979"
+    ]
+  },
+  {
+    "id": "EXT-20",
+    "query": "I produce ready-to-use dry mortar mixes for plastering and bricklaying.",
+    "retrieved_standards": [
+      "IS 2250: 1981",
+      "IS 712: 1984",
+      "IS 3182: 1986",
+      "IS 4832 (PART 2): 1969",
+      "IS 4098: 1983"
+    ],
+    "latency_seconds": 0.0102,
+    "expected_standards": [
+      "IS 2250: 1981"
+    ]
+  }
+]

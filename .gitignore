@@ -1,0 +1,11 @@
+﻿# Dataset PDF — too large for GitHub (7.5MB)
+dataset.pdf
+BIS_Sahayak_Presentation.pptx
+
+# Python cache
+__pycache__/
+*.pyc
+.env
+
+# VS Code
+.vscode/
