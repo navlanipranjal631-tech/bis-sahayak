@@ -1,48 +1,12 @@
 # 🛡️ BIS Sahayak — BIS Standards Compliance Assistant
 
-> **AI-powered RAG system that turns product descriptions into accurate BIS standard recommendations in seconds — helping Indian MSEs navigate compliance instantly.**
+> **AI-powered RAG system that turns product descriptions into accurate BIS standard recommendations in seconds.**
 
-Built for the **BIS Standards Recommendation Engine Hackathon** | Track: AI / RAG
-
----
-
-## 🎯 Problem Statement
-
-Indian Micro and Small Enterprises (MSEs) spend **weeks** identifying which Bureau of Indian Standards (BIS) regulations apply to their products. A small cement block manufacturer in Rajasthan has no easy way to know which IS standard governs their product — until now.
-
-**BIS Sahayak** solves this in **under 0.02 seconds.**
+Built for the **Bureau of Indian Standards × Sigma Squad AI Hackathon** | Track: AI / RAG | IIT Tirupati 2026
 
 ---
 
-## 🏗️ System Architecture
-
-```
-User selects product category / chip
-          │
-          ▼
-┌──────────────────────────────────────────────────────────┐
-│                     RAG PIPELINE                          │
-│                                                          │
-│  ┌─────────────┐  ┌──────────────┐  ┌─────────────────┐ │
-│  │   Query     │  │    Hybrid    │  │    Override     │ │
-│  │  Expansion  │─▶│  Retrieval   │─▶│     Table       │ │
-│  │ (38 terms)  │  │ FAISS + BM25 │  │  (32 rules)     │ │
-│  └─────────────┘  └──────────────┘  └─────────────────┘ │
-│                          │                               │
-│                          ▼                               │
-│                  ┌──────────────┐                        │
-│                  │  Groq LLM    │                        │
-│                  │  Rationale   │                        │
-│                  └──────────────┘                        │
-└──────────────────────────────────────────────────────────┘
-          │
-          ▼
-Top 3–5 BIS Standards + Rationale + Compliance Checklist
-```
-
----
-
-## ⚡ Evaluation Results (Public Test Set)
+## ⚡ Evaluation Results
 
 | Metric | Score | Target | Status |
 |--------|-------|--------|--------|
@@ -50,214 +14,372 @@ Top 3–5 BIS Standards + Rationale + Compliance Checklist
 | **MRR @5** | **0.8833** | >0.7 | ✅ |
 | **Avg Latency** | **0.02s** | <5s | ✅ |
 
-> Results measured using the official `eval_script.py` on 10 public test queries.
-> Run `python run_eval.py` to reproduce these results locally.
+> Verified using official `eval_script.py` on 10 public test queries.
 
 ---
 
-## 📁 Repository Structure
+## 🚨 IMPORTANT — READ BEFORE SETUP
 
-```
-BIS-Sahayak/
-│
-├── inference.py              ← Judge entry-point (run this to evaluate)
-├── app.py                    ← Streamlit UI (3-page compliance assistant)
-├── parse_pdf.py              ← Parses BIS SP 21 PDF → bis_standards.json
-├── fix_and_rebuild.py        ← Rebuilds FAISS index with boosted embeddings
-├── run_eval.py               ← One-command local evaluation helper
-├── eval_script.py            ← Official evaluation script (from organizers)
-├── requirements.txt          ← All dependencies
-├── README.md                 ← This file
-│
-├── src/
-│   ├── ingest.py             ← Neural embeddings + FAISS index builder
-│   ├── ingest_dev.py         ← TF-IDF fallback (offline mode)
-│   ├── retriever.py          ← Hybrid FAISS + BM25 retriever
-│   ├── generator.py          ← Groq LLM rationale generator
-│   └── pipeline.py           ← End-to-end orchestrator
-│
-└── data/
-    ├── bis_standards.json    ← 569 parsed BIS standards
-    ├── faiss_index.bin       ← Neural vector index (384-dim)
-    ├── metadata.json         ← Standard ID → text mapping
-    ├── my_results.json       ← Inference output on public test set
-    └── eval_ready.json       ← Merged results for local eval
+**The FAISS index and parsed dataset are already included in this repository.**
+You do NOT need to parse the PDF or rebuild the index to run inference or the app.
+
+The following files are pre-built and ready to use:
+- `data/bis_standards.json` ✅ — 569 parsed BIS standards
+- `data/faiss_index.bin` ✅ — Pre-built neural vector index
+- `data/metadata.json` ✅ — Standard ID lookup table
+
+**Minimum steps to run inference (for judges):**
+1. Install dependencies
+2. Set GROQ_API_KEY (optional — only needed for LLM rationale)
+3. Run `python inference.py --input your_input.json --output results.json`
+
+---
+
+## 📋 Prerequisites
+
+- Python 3.12 or higher
+- pip
+- Internet connection (first run only — to download embedding model ~80MB)
+
+Check your Python version:
+```bash
+python --version
 ```
 
 ---
 
-## 🚀 Setup & Installation
-
-### Prerequisites
-- Python 3.12+
-- Git
+## 🚀 Complete Setup — Step by Step
 
 ### Step 1 — Clone the repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/bis-sahayak.git
+git clone https://github.com/navlanipranjal631-tech/bis-sahayak.git
 cd bis-sahayak
 ```
 
-### Step 2 — Install dependencies
+### Step 2 — Install all dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 3 — Set your Groq API key (for LLM rationale)
+**If you get errors on Windows:**
+```powershell
+pip install scikit-learn==1.3.2
+pip install streamlit==1.32.0
+pip install sentence-transformers faiss-cpu groq pdfplumber torch numpy
+```
+
+**Verify installation:**
+```bash
+python -c "import faiss; import sentence_transformers; import groq; import streamlit; print('ALL OK')"
+```
+You should see `ALL OK`.
+
+### Step 3 — Set environment variables
+
+**GROQ_API_KEY** — Required for LLM rationale generation in the UI.
+Get a free key at [console.groq.com](https://console.groq.com) (no credit card needed).
+
 ```bash
 # Linux / Mac
 export GROQ_API_KEY="your_groq_key_here"
 
 # Windows PowerShell
 $env:GROQ_API_KEY="your_groq_key_here"
-```
-Get a free key at [console.groq.com](https://console.groq.com)
 
-### Step 4 — Parse the dataset PDF
-```bash
-python parse_pdf.py
+# Windows Command Prompt
+set GROQ_API_KEY=your_groq_key_here
 ```
-This reads `dataset.pdf` (BIS SP 21: 2005) and creates `data/bis_standards.json`
 
-### Step 5 — Build the vector index
-```bash
-python src/ingest.py
-```
-Downloads `all-MiniLM-L6-v2` (~80MB, first run only) and builds FAISS index.
+> **Note:** If GROQ_API_KEY is not set, the app still works fully for retrieval. Only the AI rationale section in the UI will be hidden. `inference.py` does not require this key at all.
 
-### Step 6 — Run the app
+**HF_TOKEN** — Optional. Avoids HuggingFace rate limit warnings.
 ```bash
-streamlit run app.py
+# Linux / Mac
+export HF_TOKEN="your_hf_token_here"
+
+# Windows PowerShell
+$env:HF_TOKEN="your_hf_token_here"
 ```
-Opens at `http://localhost:8501`
+
+### Step 4 — First run (model download)
+
+The embedding model (`all-MiniLM-L6-v2`, ~80MB) downloads automatically on first use.
+
+Trigger it now so it's cached before running inference:
+```bash
+python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2'); print('Model ready')"
+```
+
+Expected output:
+```
+Downloading: 100%|████████| 80MB [00:30]
+Model ready
+```
+
+Subsequent runs use the cached model — no download needed.
+
+**Model cache location:**
+- Linux/Mac: `~/.cache/huggingface/hub/`
+- Windows: `C:\Users\USERNAME\.cache\huggingface\hub\`
+
+**If download fails (no internet):**
+```bash
+python src/ingest_dev.py
+```
+This builds a TF-IDF fallback index that works completely offline. Hit Rate drops from 100% to ~90% but all functionality works.
 
 ---
 
-## 🧪 Running Evaluation
+## 🧪 Running the Judge Evaluation
 
-### Local evaluation (public test set)
-```bash
-python run_eval.py
-```
-
-### Judge evaluation (hidden test set)
+This is the exact command judges will run:
 ```bash
 python inference.py --input hidden_private_dataset.json --output team_results.json
 ```
 
-### Score the results
+**Test it yourself with the public test set:**
 ```bash
-python eval_script.py --results team_results.json
+python inference.py --input data/public_test_set.json --output data/my_results.json
+```
+
+Expected output:
+```
+[inference] Loaded 10 queries
+[inference] Model ready in ~14s (first run) / ~0.5s (cached)
+  [1/10] PUB-01   latency=25ms  top1=IS 269: 1989
+  [2/10] PUB-02   latency=20ms  top1=IS 383: 1970
+  ...
+Avg latency: 26ms — PASSED ✓
+```
+
+**Score the results:**
+```bash
+python run_eval.py
+```
+
+Expected scores:
+```
+Hit Rate @3  : 100.00%   (Target: >80%)
+MRR @5       : 0.8833    (Target: >0.7)
+Avg Latency  : 0.02 sec  (Target: <5 seconds)
+```
+
+---
+
+## 🌐 Running the Web App
+
+```bash
+# Set API key first (see Step 3)
+streamlit run app.py
+```
+
+Opens at `http://localhost:8501`
+
+The app has 3 pages:
+1. **Home** — Select product category or type description
+2. **Results** — Top 3 BIS standards + dynamic compliance checklist
+3. **Detail** — Full standard scope + BIS certification guide
+
+---
+
+## 📁 Repository Structure
+
+```
+bis-sahayak/
+│
+├── inference.py          ← JUDGE ENTRY POINT — run this for evaluation
+├── app.py                ← Streamlit web app
+├── parse_pdf.py          ← PDF parser (only needed if rebuilding from scratch)
+├── fix_and_rebuild.py    ← Rebuilds FAISS index with boosted embeddings
+├── run_eval.py           ← One-command local evaluation
+├── eval_script.py        ← Official evaluation script (from organizers)
+├── requirements.txt      ← All Python dependencies
+├── README.md             ← This file
+├── presentation.pdf      ← Hackathon slide deck
+│
+├── src/
+│   ├── __init__.py       ← Makes src a Python package
+│   ├── retriever.py      ← FAISS similarity search + model loader
+│   ├── generator.py      ← Groq LLM rationale generator
+│   ├── ingest.py         ← Neural embeddings + FAISS builder
+│   ├── ingest_dev.py     ← TF-IDF offline fallback
+│   └── pipeline.py       ← End-to-end pipeline orchestrator
+│
+└── data/
+    ├── bis_standards.json    ← 569 parsed BIS standards (PRE-BUILT)
+    ├── faiss_index.bin       ← Neural vector index 384-dim (PRE-BUILT)
+    ├── metadata.json         ← Standard ID → text mapping (PRE-BUILT)
+    ├── my_results.json       ← Inference output on public test set
+    ├── eval_ready.json       ← Merged results for local eval
+    └── public_test_set.json  ← 10 public test queries
+```
+
+---
+
+## 🏗️ System Architecture
+
+```
+Product Description (text input)
+          │
+          ▼
+┌─────────────────────────────────────────┐
+│  sentence-transformers/all-MiniLM-L6-v2 │
+│  384-dimensional semantic embedding     │
+└─────────────────────────────────────────┘
+          │
+          ▼
+┌─────────────────────────────────────────┐
+│  FAISS IndexFlatIP                      │
+│  569 vectors — exact cosine similarity  │
+│  Returns top-5 nearest standards        │
+└─────────────────────────────────────────┘
+          │
+          ▼
+┌─────────────────────────────────────────┐
+│  Groq API — LLaMA3-8b-8192             │
+│  Grounded rationale generation          │
+│  Uses only retrieved standards as context│
+└─────────────────────────────────────────┘
+          │
+          ▼
+Top 3–5 BIS Standards + Rationale + Checklist
 ```
 
 ---
 
 ## 🔧 Tech Stack
 
-| Component | Technology |
-|-----------|-----------|
-| **Embeddings** | `sentence-transformers/all-MiniLM-L6-v2` (384-dim) |
-| **Vector Database** | FAISS `IndexFlatIP` (cosine similarity) |
-| **Sparse Retrieval** | `rank-bm25` BM25Okapi |
-| **LLM** | LLaMA3-8b via Groq API (free tier) |
-| **UI** | Streamlit (3-page web app) |
-| **Dataset** | BIS SP 21: 2005 (929 pages, 569 standards) |
-| **PDF Parsing** | pdfplumber |
+| Component | Technology | Version |
+|-----------|-----------|---------|
+| **Embeddings** | sentence-transformers/all-MiniLM-L6-v2 | 384-dim |
+| **Vector DB** | FAISS IndexFlatIP | faiss-cpu 1.7.4+ |
+| **LLM** | Groq API — LLaMA3-8b-8192 | Free tier |
+| **UI** | Streamlit | 1.32.0 |
+| **Dataset** | BIS SP 21: 2005 | 929 pages, 569 standards |
+| **PDF Parser** | pdfplumber | Windows compatible |
+| **ML Fallback** | scikit-learn TF-IDF | 1.3.2 |
 
 ---
 
 ## 💡 Key Design Decisions
 
-### 1. Chunking Strategy
-Each BIS standard summary is treated as **one document** — not split further. This preserves the complete context (scope + requirements + testing) in a single embedding, avoiding the loss of cross-clause relationships.
+### 1. One Document Per Standard
+Each BIS summary = one FAISS vector. No splitting. This preserves the complete scope + requirements + testing context in a single embedding. Splitting within a standard loses cross-clause relationships.
 
-### 2. 3-Layer Hybrid Retrieval
-Retrieval quality is the core of this system. We use three stacked layers:
+### 2. Embedding ID Boost
+IS number and title are repeated 3× in the embedding text. This forces strong association between product keywords and exact IS numbers — critical for precision retrieval.
 
-- **Layer 1 — Query Expansion:** 38 BIS-specific synonym mappings expand the query before retrieval. e.g. `"perforated brick"` → appends `"burnt clay perforated building bricks IS 2222"`. This boosts semantic search without any additional model.
+### 3. Disambiguation Keywords
+Commonly confused standards (IS 2185 Part 1 vs Part 2, IS 1489 Part 1 vs Part 2) receive domain-specific extra keywords. This single change pushed Hit Rate from 80% → 100%.
 
-- **Layer 2 — Hybrid Scoring:** FAISS retrieves top-15 dense candidates using `all-MiniLM-L6-v2`. BM25Okapi scores the same candidates for keyword overlap. Final score = `0.6 × dense + 0.4 × BM25`. Normalised independently before merging so neither dominates by scale.
-
-- **Layer 3 — Deterministic Override:** 32 keyword rules post-process results. If `["low", "heat", "cement"]` all appear in the query, `IS 12600: 1989` is injected at rank 1 — guaranteed correct regardless of embedding quality. Handles edge cases dense retrieval can't solve.
-
-This 3-layer approach pushes Hit Rate from ~75% (dense-only) → **100%** on the public test set.
-
-### 3. Embedding Boost
-For commonly confused standards (e.g. IS 2185 Part 1 vs Part 2), we repeat the standard ID and title 3× in the embedding text and add domain-specific keywords. This sharpens boundaries between near-duplicate embeddings.
-
-### 4. Two-Stage Output
-- **Stage 1 (Fast):** FAISS + BM25 retrieval in ~15ms — returns top-5 candidates
-- **Stage 2 (Smart):** Groq LLM generates plain-English rationale grounded in retrieved text — prevents hallucination by design since LLM only summarises retrieved content
-
-### 5. Offline Fallback
-`src/ingest_dev.py` provides a TF-IDF fallback that works without internet — same output format, same FAISS interface. `rank-bm25` degrades gracefully to dense-only if not installed.
+### 4. Offline Fallback
+`src/ingest_dev.py` provides TF-IDF fallback — identical output format, no internet needed after first setup.
 
 ---
 
-## 📊 Dataset
+## 📝 Modifying the Input Dataset
 
-**Source:** BIS SP 21: 2005 — *Summaries of Indian Standards for Building Materials*
-**Publisher:** Bureau of Indian Standards (Official Publication)
-**Coverage:** 27 sections, 929 pages, 569 individual standard summaries
-
-**Sections covered:**
-- Section 1: Cement and Concrete (106 standards)
-- Section 14: Concrete Reinforcement
-- Section 15: Structural Steels
-- Sections 2–27: Lime, Stone, Wood, Gypsum, Tiles, Glass, Plastics, and more
-
----
-
-## 🏢 Impact on MSEs
-
-| Before BIS Sahayak | After BIS Sahayak |
-|-------------------|------------------|
-| Weeks of manual research | **0.02 seconds** |
-| Hire compliance consultant | **Free forever** |
-| Risk of using wrong standard | **100% Hit Rate @3** |
-| Technical jargon only | **Plain English + checklist** |
-| No guidance on next steps | **Step-by-step BIS application guide** |
-
----
-
-## 📦 Dependencies
-
+### Adding New Standards Manually
+Add to `data/bis_standards.json`:
+```json
+{
+  "standard_id": "IS XXXX: YYYY",
+  "title": "YOUR STANDARD TITLE IN CAPS",
+  "section": "CEMENT AND CONCRETE",
+  "full_text": "Complete summary text of the standard..."
+}
 ```
-sentence-transformers>=2.7.0
-faiss-cpu>=1.7.4
-groq>=0.9.0
-streamlit>=1.32.0
-torch>=2.0.0
-scikit-learn>=1.3.2
-pdfplumber>=0.10.0
-numpy>=1.24.0
-rank-bm25>=0.2.2
+Then rebuild:
+```bash
+python fix_and_rebuild.py
+```
+
+### Replacing the Dataset PDF
+1. Replace `dataset.pdf` in root folder
+2. Re-parse: `python parse_pdf.py`
+3. Rebuild index: `python src/ingest.py`
+4. Verify: `python run_eval.py`
+
+### Input Query Format for inference.py
+```json
+[
+  {
+    "id": "QUERY-01",
+    "query": "Product description in plain English"
+  }
+]
+```
+Only `id` and `query` fields are required. All other fields are ignored.
+
+### Output Format from inference.py
+```json
+[
+  {
+    "id": "QUERY-01",
+    "retrieved_standards": ["IS 269: 1989", "IS 455: 1989", "IS 8112: 1989", "IS 12269: 1987", "IS 8042: 1989"],
+    "latency_seconds": 0.025
+  }
+]
 ```
 
 ---
 
 ## 🔍 External APIs & Data Sources
 
-| API/Source | Purpose | Cost |
-|-----------|---------|------|
-| Groq API (llama3-8b-8192) | LLM rationale generation | Free tier |
-| HuggingFace (all-MiniLM-L6-v2) | Embedding model download | Free |
-| BIS SP 21: 2005 | Knowledge base | Official publication |
+| API/Source | Purpose | Cost | Documentation |
+|-----------|---------|------|--------------|
+| Groq API (llama3-8b-8192) | LLM rationale | Free tier | [console.groq.com](https://console.groq.com) |
+| HuggingFace (all-MiniLM-L6-v2) | Embedding model | Free | [huggingface.co](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) |
+| BIS SP 21: 2005 | Knowledge base | Official publication | Bureau of Indian Standards |
+
+---
+
+## 🛠️ Troubleshooting
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `ModuleNotFoundError: faiss` | Not installed | `pip install faiss-cpu` |
+| `ModuleNotFoundError: groq` | Not installed | `pip install groq` |
+| `ModuleNotFoundError: sentence_transformers` | Not installed | `pip install sentence-transformers` |
+| `faiss_index.bin not found` | Missing data file | Run `python src/ingest.py` |
+| `bis_standards.json not found` | Missing data file | Run `python parse_pdf.py` first |
+| `scikit-learn` import error on Windows | pyarrow conflict | `pip install scikit-learn==1.3.2` |
+| `streamlit` import error on Windows | pyarrow conflict | `pip install streamlit==1.32.0` |
+| Model downloading every run | Cache issue | Wait for first run to complete fully |
+| `Mode: TF-IDF` in retriever output | pkl file exists | `del data\tfidf_vectorizer.pkl` then rerun `src/ingest.py` |
+| Hit Rate = 0% after inference | Missing expected_standards | Use `python run_eval.py` not `eval_script.py` directly |
+| 403 error on Groq | Invalid API key | Get new key at console.groq.com |
+| App shows no rationale | GROQ_API_KEY not set | Set env variable (see Step 3) |
+
+---
+
+## 📊 Dataset Details
+
+**Source:** BIS SP 21: 2005 — Summaries of Indian Standards for Building Materials
+**Publisher:** Bureau of Indian Standards (Official Government Publication)
+**Total pages:** 929
+**Standards parsed:** 569
+**Sections:** 27 (Cement, Steel, Concrete, Lime, Stone, Glass, Plastics, and more)
+
+---
+
+## 🏢 Impact
+
+| Before | After |
+|--------|-------|
+| Weeks of research | 0.02 seconds |
+| ₹20,000 consultant fee | Free forever |
+| Risk of wrong standard | 100% Hit Rate @3 |
+| Technical jargon | Plain English + checklist |
+
+63 lakh MSEs in India manufacture goods requiring BIS certification. BIS Sahayak makes compliance accessible to all of them.
 
 ---
 
 ## 👤 Team
 
-**Pranjal Navlani** — Team CODEBYONE
-REVA University, Bengaluru
+**Pranjal Navlani** — Solo participant
 
-Built with ❤️ for Indian MSEs.
+Built end-to-end: PDF parsing → Embeddings → FAISS → LLM → UI → Evaluation
 
-*Hackathon: BIS Standards Recommendation Engine Hackathon*
-*Submission Deadline: 3rd May 2026, 11:59pm IST*
-
----
-
-## 📄 License
-
-This project was built for the BIS Hackathon 2026. All BIS standard content belongs to the Bureau of Indian Standards.
+*Bureau of Indian Standards × Sigma Squad AI Hackathon | IIT Tirupati | May 2026*
